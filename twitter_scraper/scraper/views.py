@@ -15,6 +15,9 @@ def scrape_tweets(request):
         if not username:
             return JsonResponse({'error': 'Username is required'}, status=400)
 
-        tweets = fetch_tweets(username, limit)
-        return JsonResponse({'tweets': tweets })
+        try:
+            tweets = fetch_tweets(username, limit)
+            return JsonResponse({'tweets': tweets}, safe=False)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
 
