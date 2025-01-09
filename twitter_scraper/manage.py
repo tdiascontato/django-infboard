@@ -2,6 +2,11 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+import openai
+from decouple import config
+
+openai.api_key = config("OPENAI_API_KEY")
+
 
 
 def main():
