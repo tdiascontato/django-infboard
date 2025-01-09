@@ -1,4 +1,3 @@
-# twitter_scraper\scraper\utils.py
 import re
 import time
 import json
@@ -107,7 +106,7 @@ def influencer_percentual_comment_category(tweets, influencer):
     except Exception as e:
         raise Exception(f"Error at analyzing tweets with ChatGPT: {str(e)}")
 
-def influencer_followers_tweets(username):
+def influencer_save_utils(username):
     bearer_token = config("BEARER_TOKEN")
     client = tweepy.Client(bearer_token=bearer_token)
 
@@ -117,10 +116,18 @@ def influencer_followers_tweets(username):
         if user_data:
             followers_count = user_data.public_metrics["followers_count"]
             tweet_count = user_data.public_metrics["tweet_count"]
-            return {
+            influencer_obj, created = Influencer.objects.get_or_create(
+                username=username,
+                defaults={
                 "followers_count": followers_count,
                 "tweet_count": tweet_count,
-            }
+                "created_at": timezone.now()
+                }
+            )
+            if not created:
+                influencer_obj.followers_count = followers_count
+                influencer_obj.tweet_count = tweet_count
+                influencer_obj.save()
         else:
             raise Exception("User not found")
 

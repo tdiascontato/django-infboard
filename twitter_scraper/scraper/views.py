@@ -1,4 +1,3 @@
-# twitter_scraper\scraper\views.py
 import openai
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -7,6 +6,7 @@ from .utils import fetch_recents_tweets
 from .models import Tweet, Influencer
 from decouple import config
 from django.db.models import Avg
+from .utils import influencer_save_utils
 
 openai.api_key = config("OPENAI_API_KEY")
 
@@ -56,5 +56,27 @@ def influencer_rank(request):
             influencers = influencers.order_by('-score')
             influencer_list = serialize('json', influencers)
             return JsonResponse(influencer_list, status=200)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+@csrf_exempt
+def all_tweets(request):
+    if request.method == 'GET':
+        try:
+            limit = int(request.GET.get('limit', 20))
+            tweets = Tweet.objects.all().order_by('-created_at')[:limit]
+            tweet_list = serialize('json', tweets)
+            return JsonResponse(tweet_list, safe=False, status=200)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+
+@csrf_exempt
+def influencer_save(request):    
+    if request.method == 'POST':
+        try:
+            username = request.POST.get('username')
+            influencer_save_utils(username)
+            return JsonResponse({'message': 'Influencer saved successfully'}, status=200)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
