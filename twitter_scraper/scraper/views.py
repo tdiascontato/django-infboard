@@ -46,8 +46,15 @@ def numbers_stats_general(request):
 def influencer_rank(request):
     if request.method == 'GET':
         try:
-            influencers = Influencer.objects.all().order_by('-score')
+            influencers = Influencer.objects.all()
+            for influencer in influencers:
+                tweets = Tweet.objects.filter(influencer=influencer)
+                if tweets.exists():
+                    avg_score = tweets.aggregate(Avg('percentual'))['percentual__avg']
+                    influencer.score = avg_score
+                    influencer.save()
+            influencers = influencers.order_by('-score')
             influencer_list = serialize('json', influencers)
-            return JsonResponse(influencer_list, safe=False)
+            return JsonResponse(influencer_list, status=200)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)

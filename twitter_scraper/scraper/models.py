@@ -6,7 +6,6 @@ class Influencer(models.Model):
     id = models.AutoField(primary_key=True) 
     username = models.CharField(max_length=100, unique=True)
     created_at = models.DateTimeField()
-    rank = models.IntegerField(null=True, blank=True)
     category = models.CharField(max_length=100, null=True, blank=True)
     trend = models.CharField(max_length=100, null=True, blank=True)
     followers = models.CharField(max_length=100, null=True, blank=True)

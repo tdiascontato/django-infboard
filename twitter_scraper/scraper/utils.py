@@ -60,7 +60,7 @@ def influencer_percentual_comment_category(tweets, influencer):
                 "You are a content analysis expert. Evaluate the factuality of the information "
                 "in the following set of tweets, providing a confidence percentage, a simple description of authenticity (one simple prhase), "
                 ", the category that best fits the profile (Technology, Entertainment, Beauty, Sports, Business, Health, "
-                "Politics, Education, Travel). Return the result in JSON format only, without additional explanations (percentage, comment, category):\n\n"
+                "Politics, Education, Travel). Return the result in JSON format only, without additional explanations (percentual, comment, category):\n\n"
                 f"{tweet}\n\n"
             )
             response = openai.ChatCompletion.create(
@@ -84,7 +84,7 @@ def influencer_percentual_comment_category(tweets, influencer):
 
                 category = analysis.get("category", "Unknown")
                 comment = analysis.get("comment", "")
-                percentual = analysis.get("percentual", 0)
+                percentual = analysis.get("percentual", 50)
 
                 tweet_response = Tweet.objects.get_or_create(
                     influencer=influencer_obj,
