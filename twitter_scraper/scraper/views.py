@@ -54,7 +54,7 @@ def influencer_rank(request):
                     influencer.score = avg_score
                     influencer.save()
             influencers = influencers.order_by('-score')
-            influencer_list = serialize('json', influencers)
+            influencer_list = list(influencers.values())
             return JsonResponse(influencer_list, status=200, safe=False)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
