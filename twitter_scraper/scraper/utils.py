@@ -39,7 +39,7 @@ def fetch_recents_tweets(username, limit=10):
     except tweepy.TooManyRequests as e:
         reset_time = int(e.response.headers.get("x-rate-limit-reset", time.time() + 60))
         wait_time = reset_time - int(time.time())
-        raise Exception(f"Rate limit exceeded. Try again in {wait_time} seconds.")
+        return json.dumps({"tweets": f"Rate limit exceeded. Try again in {wait_time} seconds."}, status=200),
     
     except tweepy.TweepyException as e:
         raise Exception(f"Error: {str(e)}")
@@ -128,6 +128,7 @@ def influencer_save_utils(username):
                 influencer_obj.followers_count = followers_count
                 influencer_obj.tweet_count = tweet_count
                 influencer_obj.save()
+            return influencer_obj
         else:
             raise Exception("User not found")
 

@@ -7,14 +7,6 @@
 The Django Infboard API is a service to collect and manage information from Twitter influencers. This API allows you to read, update, and delete tweets on the dashboard. The application uses SQLite DB to save the data.
 Returns a list of all tweets from the chosen filter.
 
-### GPT
-```
-POST /api/ai/
-```
-Creates an interaction with ChatGPT.
-#### Parameters:
-- `Question` (string): Question body.
-
 #### SQLite DB:
 ![alt text](public/screenthree.png)
 

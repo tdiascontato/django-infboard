@@ -55,7 +55,7 @@ def influencer_rank(request):
                     influencer.save()
             influencers = influencers.order_by('-score')
             influencer_list = serialize('json', influencers)
-            return JsonResponse(influencer_list, status=200)
+            return JsonResponse(influencer_list, status=200, safe=False)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
 
@@ -76,7 +76,7 @@ def influencer_save(request):
     if request.method == 'POST':
         try:
             username = request.POST.get('username')
-            influencer_save_utils(username)
-            return JsonResponse({'message': 'Influencer saved successfully'}, status=200)
+            influencer = influencer_save_utils(username)
+            return JsonResponse(influencer, status=200)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
